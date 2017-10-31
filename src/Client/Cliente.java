@@ -25,6 +25,40 @@ public class Cliente {
  public static int id ;
 	
 	static class Chat extends Observable {
+        private Socket cliente;
+        private OutputStream outputStream;
+		
+	Scanner leitor = new Scanner(System.in);	
+		
+        @Override
+        public void notifyObservers(Object arg) {
+            super.setChanged();
+            super.notifyObservers(arg);
+        }
+		/** / ** Crea cliente de conexión * / */
+        public Chat(String server, int port) throws IOException {            
+                        
+            cliente = new Socket(server, port);
+            outputStream = cliente.getOutputStream();
+
+            Thread receivingThread = new Thread() 
+            {
+                @Override
+                public void run() {
+                    try {
+                        BufferedReader reader = new BufferedReader(
+                                new InputStreamReader(cliente.getInputStream()));
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            notifyObservers(line);
+                        }
+                    } catch (IOException ex) {
+                        notifyObservers(ex);
+                    }
+                }
+            };
+            receivingThread.start();
+        }
 		
 		
 	    }
