@@ -100,9 +100,56 @@ public class Cliente {
             buildGUI();
         }
 
+        /* interfaz */
+        private void buildGUI() {
+            textArea = new JTextArea(20, 50);
+            textArea.setEditable(false);
+            textArea.setLineWrap(true);
+            add(new JScrollPane(textArea), BorderLayout.CENTER);
+
+            Box box = Box.createHorizontalBox();
+            add(box, BorderLayout.SOUTH);
+            inputTextField = new JTextField();
+            sendButton = new JButton("Envia");
+            box.add(inputTextField);
+            box.add(sendButton);
+
+            ActionListener sendListener = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String str = inputTextField.getText();
+                    if (str != null && str.trim().length() > 0) {
+                        chatAccess.send(str);
+                    }
+                    inputTextField.selectAll();
+                    inputTextField.requestFocus();
+                    inputTextField.setText("");
+                }
+            };
+            inputTextField.addActionListener(sendListener);
+            sendButton.addActionListener(sendListener);
+
+            this.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    chatAccess.close();
+                }
+            });
+        }
+
+        public void update(Observable o, Object arg) {
+            final Object finalArg = arg;
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    textArea.append(finalArg.toString());
+                    textArea.append("\n");
+                }
+            });
+        }
     }
 
-    public static void main(String[] args) {
+
+
+public static void main(String[] args) {
         String server = "127.0.0.1";
         int port = 2222;
         Chat access = null;
