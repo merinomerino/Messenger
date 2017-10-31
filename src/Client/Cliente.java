@@ -83,7 +83,10 @@ public class Cliente {
 	    }
 
 	static class ChatFrame extends JFrame implements Observer {
-	
+	private JTextArea textArea;
+        private JTextField inputTextField;
+        private JButton sendButton;
+        private Chat chatAccess;
 	
 	}
 	public static void main(String[] args) {
