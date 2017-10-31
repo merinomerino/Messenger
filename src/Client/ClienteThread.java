@@ -109,6 +109,13 @@ public class ClienteThread extends Thread {
                     }
                 }
             }
+             /**
+             * Cierre la secuencia de salida, cierre la secuencia de entrada,
+             * cierre el socket.
+             */
+            is.close();
+            os.close();
+            clientSocket.close();
 
         } catch (IOException ex) {
             Logger.getLogger(ClienteThread.class.getName()).log(Level.SEVERE, null, ex);
