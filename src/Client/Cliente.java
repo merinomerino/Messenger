@@ -87,6 +87,11 @@ public class Cliente {
         private JTextField inputTextField;
         private JButton sendButton;
         private Chat chatAccess;
+        public ChatFrame(Chat chatAccess) {
+            this.chatAccess = chatAccess;
+            chatAccess.addObserver(this);
+            buildGUI();
+        }
 	
 	}
 	public static void main(String[] args) {
