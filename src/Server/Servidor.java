@@ -5,7 +5,11 @@ package Server;
 import javax.swing.*;
 
 import java.awt.*;
-
+import java.awt.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 public class Servidor  {
 	// El socket del servidor.
     private static ServerSocket servidor = null;
