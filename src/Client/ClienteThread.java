@@ -73,7 +73,7 @@ public class ClienteThread extends Thread {
             while (true) {
                 String line = is.readLine();
                 /*asigna nuevas conversaciones a la variable globo de msg */
-                Server.mensagens += name + " dice: " + line + "\n";
+                Servidor.mensagens += name + " dice: " + line + "\n";
                 if (line.startsWith("/quit")) {
                     break;
                 } else {
