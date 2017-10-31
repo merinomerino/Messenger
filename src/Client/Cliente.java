@@ -59,6 +59,17 @@ public class Cliente {
             };
             receivingThread.start();
         }
+        private static final String CRLF = "\r\n"; // nueva línea
+
+        public void send(String text) {
+            try {
+
+                outputStream.write((text + CRLF).getBytes());
+                outputStream.flush();
+            } catch (IOException ex) {
+                notifyObservers(ex);
+            }
+        }
 		
 		
 	    }
