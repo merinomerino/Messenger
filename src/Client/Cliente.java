@@ -70,6 +70,14 @@ public class Cliente {
                 notifyObservers(ex);
             }
         }
+		/* / * cierra el cliente * / */
+        public void close() {
+            try {
+                cliente.close();
+            } catch (IOException ex) {
+                notifyObservers(ex);
+            }
+        }
 		
 		
 	    }
