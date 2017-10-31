@@ -1,4 +1,4 @@
-package Client;
+package Cliente;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,59 +21,36 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 public class Cliente {
+	
+ public static int id ;
+	
+	static class Chat extends Observable {
+		
+		
+	    }
 
+	static class ChatFrame extends JFrame implements Observer {
+	
+	
+	}
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		MarcoCliente mimarco=new MarcoCliente();
-		
-		mimarco.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        String server = "127.0.0.1";
+        int port = 2222;
+        Chat access = null;
 
-	}
+        try {
+            access = new Chat(server, port);
+        } catch (IOException ex) {
 
-}
+            ex.printStackTrace();
+            System.exit(0);
+        }
+        JFrame frame = new ChatFrame(access);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setVisible(true);
 
-
-class MarcoCliente extends JFrame{
-	
-	public MarcoCliente(){
-		
-		setBounds(600,300,280,350);
-				
-		LaminaMarcoCliente milamina=new LaminaMarcoCliente();
-		
-		add(milamina);
-		
-		setVisible(true);
-		}	
-	
-}
-
-class LaminaMarcoCliente extends JPanel{
-	
-	public LaminaMarcoCliente(){
-	
-		JLabel texto=new JLabel("CLIENTE");
-		
-		add(texto);
-	
-		campo1=new JTextField(20);
-	
-		add(campo1);		
-	
-		miboton=new JButton("Enviar");
-		
-		add(miboton);	
-		
-	}
-	
-	
-	
-		
-		
-		
-	private JTextField campo1;
-	
-	private JButton miboton;
-	
+    }
 }
