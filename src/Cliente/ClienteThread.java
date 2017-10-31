@@ -8,16 +8,10 @@ package Cliente;
 import java.io.DataInputStream;
 import java.io.PrintStream;
 import java.net.Socket;
-import Server.Servidor;
+import Servidor.server;
+import java.io.IOException;
 
 // Para cada conexión de cliente llamamos a esta clase
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class ClienteThread extends Thread {
 
     private String clientName = null;
@@ -34,9 +28,10 @@ public class ClienteThread extends Thread {
     }
 
     public void run() {
+
+        int maxClientsCount = this.maxClientsCount;
+        ClienteThread[] threads = this.threads;
         try {
-            int maxClientsCount = this.maxClientsCount;
-            ClienteThread[] threads = this.threads;
 
             //Crea flujos de entrada y salida para clientes cliente.
             is = new DataInputStream(clientSocket.getInputStream());
@@ -55,7 +50,7 @@ public class ClienteThread extends Thread {
             }
 //              Msg de bienvenida y envío de conversaciones anteriores 
             System.out.println("" + name + "  Se unio al grupo");
-            System.out.print(Servidor.mensagens);
+            System.out.print(server.mensagens);
             synchronized (this) {
                 for (int i = 0; i < maxClientsCount; i++) {
                     if (threads[i] != null && threads[i] == this) {
@@ -73,7 +68,7 @@ public class ClienteThread extends Thread {
             while (true) {
                 String line = is.readLine();
                 /*asigna nuevas conversaciones a la variable globo de msg */
-                Servidor.mensagens += name + " dice: " + line + "\n";
+                server.mensagens += name + " dice: " + line + "\n";
                 if (line.startsWith("/quit")) {
                     break;
                 } else {
@@ -98,10 +93,8 @@ public class ClienteThread extends Thread {
             }
             os.println("*** Bye " + name + " ***");
 
-            
 //       * Limpiar. Establezca la variable de subproceso actual en nulo para que un nuevo cliente
 //       * podría ser aceptado por el servidor.
-          
             synchronized (this) {
                 for (int i = 0; i < maxClientsCount; i++) {
                     if (threads[i] == this) {
@@ -109,16 +102,15 @@ public class ClienteThread extends Thread {
                     }
                 }
             }
-             /**
+            /**
              * Cierre la secuencia de salida, cierre la secuencia de entrada,
              * cierre el socket.
              */
             is.close();
             os.close();
             clientSocket.close();
+        } catch (IOException e) {
 
-        } catch (IOException ex) {
-            Logger.getLogger(ClienteThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

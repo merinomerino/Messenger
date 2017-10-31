@@ -1,4 +1,4 @@
-package Server;
+package Servidor;
 
 import Cliente.ClienteThread;
 import javax.swing.*;
@@ -7,10 +7,11 @@ import java.awt.*;
 import java.awt.*;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Servidor {
+public class server {
     // El socket del servidor.
 
     private static ServerSocket servidor = null;
@@ -24,7 +25,7 @@ public class Servidor {
     private static final int maxClientsCount = 10;
     private static final ClienteThread[] threads = new ClienteThread[maxClientsCount];
 
-    public Servidor(int porta, int tamFila) {
+    public server(int porta, int tamFila) {
 
         try {
 
@@ -38,6 +39,31 @@ public class Servidor {
             io.printStackTrace();
         }
     }
+    public void runServidor() {
+
+        System.out.println("Servidor listo y esperando ...");
+        while (true) {
+            try {
+                connection = servidor.accept();
+                int i = 0;
+                for (i = 0; i < maxClientsCount; i++) {
+                    if (threads[i] == null) {
+                        (threads[i] = new ClienteThread(connection, threads)).start();
+                        break;
+                    }
+                }
+                if (i == maxClientsCount) {
+                    PrintStream os = new PrintStream(connection.getOutputStream());
+                    os.println("Servidor muy ocupado. Intenta más tarde.");
+                    os.close();
+                    connection.close();
+                }
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+        }
+    }
+
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
@@ -66,6 +92,10 @@ class MarcoServidor extends JFrame {
         add(milamina);
 
         setVisible(true);
+        server s = new server(2222, 0);
+        //Server s2 = new Server(2223, 0);
+       // Server s3 = new Server(2225, 0);
+        s.runServidor();
 
     }
 

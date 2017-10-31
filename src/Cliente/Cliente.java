@@ -23,14 +23,14 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 public class Cliente {
-
-    public static int id;
-
+  public static int id ;
     static class Chat extends Observable {
 
         private Socket cliente;
         private OutputStream outputStream;
-
+       
+       
+        
         Scanner leitor = new Scanner(System.in);
 
         @Override
@@ -38,12 +38,9 @@ public class Cliente {
             super.setChanged();
             super.notifyObservers(arg);
         }
-
-        /**
-         * / ** Crea cliente de conexión * /
-         */
-        public Chat(String server, int port) throws IOException {
-
+       /** / ** Crea cliente de conexión * / */
+        public Chat(String server, int port) throws IOException {            
+                        
             cliente = new Socket(server, port);
             outputStream = cliente.getOutputStream();
 
@@ -64,6 +61,7 @@ public class Cliente {
             };
             receivingThread.start();
         }
+
         private static final String CRLF = "\r\n"; // nueva línea
 
         public void send(String text) {
@@ -84,9 +82,11 @@ public class Cliente {
                 notifyObservers(ex);
             }
         }
-
     }
 
+    /**
+     * Chat cliente de prueba
+     */
     static class ChatFrame extends JFrame implements Observer {
 
         private JTextArea textArea;
@@ -147,9 +147,7 @@ public class Cliente {
         }
     }
 
-
-
-public static void main(String[] args) {
+    public static void main(String[] args) {
         String server = "127.0.0.1";
         int port = 2222;
         Chat access = null;
